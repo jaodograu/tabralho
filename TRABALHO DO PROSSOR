@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+    <html lang="pt-br">
+        <head>
+
+            <meta charset="UTF-8">
+
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Capturar Objetos Caindo</title>
+        <style>
+            canvas{
+            background-color: lightblue;
+            display: block;
+            margin: auto;
+}
+
+        </style>
+        </head>
+        <body>
+        <canvas id="gameCanvas" width="500" height="500"></canvas>
+
+        <script>
+    
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    
+    let jogadorX = canvas.width / 2 - 25; 
+    const jogadorLargura = 50; 
+    const jogadorAltura = 20; 
+    let objetox = Math.random() * (canvas.width - 20); 
+    let objetoY = 0; 
+    const objetoLargura = 20; 
+    const objetoAltura = 20; 
+    let velocidadeObjeto = 3; 
+    let pontuacao = 0; 
+    let jogoAtivo = true; 
+
+    
+let setaEsquerda = false;
+let setaDireita = false;
+
+function desenhaJogador() {
+ctx.fillStyle = "green";
+ctx.fillRect(jogadorX, canvas.height - jogadorAltura, jogadorLargura, jogadorA)
+}
+
+function desenhaObjeto() {
+ctx.fillStyle = "red";
+ctx.fillRect(objetox, objetoy, objetoLargura, objetoAltura);
+}
+
+function desenhaPontuacao() {
+ctx.fillStyle = "black";
+ctx.font = "20px Arial";
+ctx.fillText("Pontuação: " + pontuacao, 10, 20);
+}
+
+function atualizar() {
+if (setaDireita && jogadorX < canvas.width - jogadorLargura) {
+jogadorX += 7; 
+} else if (setaEsquerda && jogadorx > 0) {
+jogadorX = 7; 
+}
+
+objeto += velocidadeObjeto;
+
+}
+
+if (objeto > canvas.height) {
+jogoAtivo = false; 
+alert("Fim de jogo! Sua pontuação foi: "+ pontuacao);
+document.location.reload(); 
+
+}
+
+if (
+objeto + objetoAltura > canvas.height - jogadorAltura && -
+objetoX + objetoLargura > jogadorX &&
+objetox < jogadorX + jogadorLargura
+) {
+
+    pontuacao++;
+
+objetoX = Math.random() (canvas.width - objetoLargura);
+objetoy = 0;
+velocidadeObjeto += 0.5; 
+
+    }
+
+
+function desenhar() {
+if (jogoAtivo) {
+
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+desenhaJogador();
+desenhaObjeto();
+desenhaPontuacao();
+
+atualizar();
+
+requestAnimationFrame(desenhar);
+
+}
+}
+
+document.addEventListener("keydown", function (event) {
+if (event.key === "ArrowRight") {
+setaDireita = true;
+} else if (event.key === "ArrowLeft") {
+setaEsquerda = true;
+}
+});
+
+document.addEventListener("keyup", function (event) {
+if (event.key === "ArrowRight") {
+setaDireita = false;
+} else if (event.key === "ArrowLeft") {
+setaEsquerda = false;
+}
+});
+
+// Inicia O Joga
+
+desenhar();
+</script>
+</body>
+</html>
