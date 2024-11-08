@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"
+    <title>Catálogo de Filmes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+            width: 100%
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .filmes-lista {
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 10px;
+            background-color: #f5f5f5
+        }
+
+        .filme-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filme-item:last-child {
+            border-bottom: none;
+        }
+
+        .filme-item strong {
+            display: block;
+            margin-top: 5px;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Catálogo de Filmes</h1>
+
+    <div>
+        <h2>Cadastrar Novo Filme</h2>
+        <label for="none">Nome do Filme:</label>
+        <input type="text" id="nome" placeholder="insira o nome do filme">
+
+        <label for="classificação">Classificação Indicativa:</label>
+        <input type="text" id="classificação" placeholder="Ex: Livre,12 Anos, etc.">
+
+        <label for="duração">Duração (minutos) :</label>
+        <input type="number" id="duração" placeholder="Duração em minutos">
+
+        <label for="genero">Gênero:</label>
+        <input type="text" id="genero" placeholder="Ex: Ação, Comédia, Drama, etc.">
+
+        <label for="ano">Ano de lançamento:</label>
+        <input type="number" id="ano" placeholder="Ano de lançamento">
+        
+        <label for="sinpopse">Sinopse</label>
+        <textarea id="sinopse" rows="4" placeholder="insira a sinopse do filme"></textarea>
+
+        <button onclick="cadastrarFilme ()">Cadastrar Filme</button>
+        <button onclick="atualizarFilme ()" id="btn-atualizar"
+        style="display:none;">Atualizar Filme</button>
+    </div>
+
+    <div>
+        <h2>Buscar Filme por Nome</h2>
+        <input type="text" id="busca" placeholder="Digite o nome do Filme">
+
+        <button onclick="buscarFilme ()">Buscar</button>
+    </div>
+
+    <div>
+        <h2>Todos os Filmes Cadastrados</h2>
+        <button onclick="listarFilmes ()">Exibir Todos os Filmes</button>
+
+        <div id="lista-filmes" class="filmes-lista"></div>
+    </div>
+
+    <script>
+        let catalogo = [];
+        let filmeEditando = null;
+
+        //Função para cadastrar novo filme
+
+        function cadastrarFilme() {
+            const nome= document.getElementById('nome').value;
+            const classificação = document.getElementById('classificação').value;
+            const duração = document.getElemenById('duração').value;
+            const genero = document.getElementById('genero').value;
+            const ano = document.getElementById('ano').value;
+            const sinopse = document.getElementById('sinopse').value;
+
+            if (nome && classificação && duração && genero && ano && sinopse) {
+                
+                const novoFilme = {
+                    nome,
+                    classificação,
+                    duração,
+                    genero,
+                    ano,
+                    sinopse
+                };
+                
+                catalogo.push(novoFilme);
+                alert(`Filme "${nome}" cadastrado com sucesso!`);
+                limparCampos ();
+                listarFilmes ();
+            } else {
+                alert("Por favor, preencha todos os campos!");
+            }
+        }
+
+        //Função para buscar filme por nome
+        function buscarFilme() {
+            const busca = document.getElementById('lista-filmes');
+            listaFilmes.innerHTML = '';
+
+            if (filmeEncontradp) {
+                listaFilmes.innerHTML = formatarDetalhesFilme(filmeEncontradp);
+            } else {
+                listaFilmes.innerHTML = `<p>Filme "${busca}" não encontrado.</p>`;
+            }
+        }
+
+        //Função para listar todos os filmes
+        function listarFilmes() {
+            const listaFilmes = document.getElementById('lista-filmes');
+            listaFilmes.innerHTML = '';
+
+            if (catalogo.lenght === 0) {
+                listaFilmes.innerHTML = '<p>Nenhum filme cadastrado no catálogo.</p>';
+            } else {
+                catalogo.forEach((filme, index) => {
+                    listaFilmes.innerHTML += formatarDetalhesFilme(filmes,index);
+                });
+            }
+        }
+
+        //Função auxiliar para formatar os detalhes de um filme com botões de editar e excluir
+
+        function formatarDetalhesFilme(filme, index) {
+            return `
+                <div class="filme-item">
+                    <strong>Nome:</strong> ${filme.nome}
+                    <strong>Classificação Indicativa:</strong> 
+                    
+                ${filme.classificação}
+                    
+                    <strong>Duração:</strong> ${filme.duração} minutos
+                    <strong>Genero:</strong> ${filme.genero}
+                    <strong>Ano de Lançamento:</strong> ${filme.ano}
+                    <strong>Sinopse:</strong> ${filme.sinopse}
+                    <div class="actions">
+                        <button onclick="editarFilme(${index})">Editar</button>
+                        <button onclick="excluirFilme(${index})"style="background-color: #dc3545;">Excluir</button>
+            </div>
+            </div>
+            `; }
